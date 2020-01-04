@@ -1,6 +1,6 @@
-import React from 'react';
-import Joke from './components/Joke'
-import PageHeader from './components/PageHeader.jsx'
+import React from "react";
+import Joke from "./components/Joke";
+import PageHeader from "./components/PageHeader";
 
 function App() {
   return (
