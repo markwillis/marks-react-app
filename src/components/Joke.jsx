@@ -7,7 +7,7 @@ class Joke extends React.Component {
       jokeData: {
         results: [
           {
-            joke: "No Joke yet"
+            joke: "Loading..."
           }
         ]
       }

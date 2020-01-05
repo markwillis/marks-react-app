@@ -82,8 +82,11 @@ span {
 }
 
 .joke {
-  background-color: lightgray;
+  background-color: white;
   padding: 25px;
+  border: 1px solid;
+  border-color: darkgray;
+  border-radius: 4px;
 }
 
 
