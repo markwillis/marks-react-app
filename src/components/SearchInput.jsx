@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types'
 
 class SearchInput extends React.Component {
   constructor() {
@@ -35,6 +36,10 @@ class SearchInput extends React.Component {
       </form>
     );
   }
+}
+
+SearchInput.propTypes = {
+  searchTerm: PropTypes.string
 }
 
 export default SearchInput;
