@@ -5,7 +5,7 @@ This is a practice app that will be built using React to solidify the things I l
 I will start with the basic syntaxes that I know, rather than adding shortcuts, so I get to know how to debug and solve issues. 
 
 ### Jokes API
-In the spirit of the `Vlad joke` I will be making a Vlad Joke generator, using the `icanhazdadjoke` API.
+In the spirit of the `Vlad joke` I will be making a Dad Joke generator, using the `icanhazdadjoke` API.
 
 ### Features
 - Random Joke 
