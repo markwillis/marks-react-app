@@ -14,22 +14,40 @@ class App extends React.Component {
       searchTerm: ""
     }
     this.handleChange = this.handleChange.bind(this)
-    this.handlClick = this.handleClick.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   handleChange(event) {
     this.setState({searchTerm: event.target.value})
   }
 
-  handleClick(event) {
+  async handleClick(event) {
     event.preventDefault()
-    return this.state.searchTerm
+    const url = `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`;
+    const fetchUrl = fetch(url, {
+      method: "GET",
+      headers: { accept: "application/json" }
+    });
+    const response = await fetchUrl;
+    const myData = await response.json();
+    this.setState({ jokeData: { results: myData.results } });
     // I want to take the search term, and add it to the Joke API url
     // and then re-render the Jokes, based on that search term.
   }
 
+  // async componentDidUpdate(prevProps, prevState) {
+  //   const url = `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`;
+  //   const fetchUrl = fetch(url, {
+  //     method: "GET",
+  //     headers: { accept: "application/json" }
+  //   });
+  //   const response = await fetchUrl;
+  //   const myData = await response.json();
+  //   this.setState({ jokeData: { results: myData.results } });
+  // }
+
   async componentDidMount() {
-    const url = `https://icanhazdadjoke.com/search?term=dog`;
+    const url = `https://icanhazdadjoke.com/search`;
     const fetchUrl = fetch(url, {
       method: "GET",
       headers: { accept: "application/json" }
@@ -50,7 +68,7 @@ class App extends React.Component {
         <PageHeader>
           <SearchInput
             handleChange={this.handleChange}
-            handlClick={this.handlClick}
+            handleClick={this.handleClick}
             placeholder="Search for a joke..."
             onChange={this.handleChange}
             value={this.state.searchTerm}
