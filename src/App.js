@@ -6,48 +6,51 @@ import PropTypes from "prop-types";
 
 class App extends React.Component {
   state = {
-      jokeData: {
-        results: []
-      },
-      searchTerm: "",
-      loadingState: "resting",
-  }
+    jokeData: {
+      results: []
+    },
+    searchTerm: "",
+    loadingState: "resting"
+  };
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.setState({ searchTerm: event.target.value });
-  }
+  };
 
-  handleClick = (event) => {
+  handleClick = event => {
     event.preventDefault();
     this.setState({ loadingState: "loading" });
-  }
+  };
 
   async fetchJokes() {
     try {
-      const url = this.state.searchTerm === "" ? `https://icanhazdadjoke.com/search` : `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`
+      const url =
+        this.state.searchTerm === ""
+          ? `https://icanhazdadjoke.com/search/`
+          : `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`;
       const fetchUrl = fetch(url, {
         method: "GET",
         headers: { accept: "application/json" }
       });
-      const response = await fetchUrl.json()
+      const response = await fetchUrl.json();
       const myData = await response.json();
       this.setState({
         jokeData: { results: myData.results },
         loadingState: "loaded"
-      })
-    } catch(e) {
-        this.setState({loadingState: "Something went wrong"})
+      });
+    } catch (e) {
+      this.setState({ loadingState: "Something went wrong" });
     }
-  };
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.loadingState === "loading") {
-      this.fetchJokes()
+      this.fetchJokes();
     }
   }
 
   componentDidMount() {
-    this.fetchJokes()
+    this.fetchJokes();
   }
 
   // This needs rendering inside a map function, then rendering in the render as <div>{jokeList}</div>
