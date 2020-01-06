@@ -16,7 +16,6 @@ function SearchInput(props) {
       <p>{props.searchTerm}</p>
     </form>
   );
-
-
+}
 
 export default SearchInput;
