@@ -2,59 +2,52 @@ import React from "react";
 import Joke from "./components/Joke";
 import PageHeader from "./components/PageHeader";
 import SearchInput from "./components/SearchInput";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 class App extends React.Component {
-  constructor() {
-    super()
-    this.state = {
+  state = {
       jokeData: {
         results: []
       },
-      searchTerm: ""
+      searchTerm: "",
+      loadingState: "resting",
+  }
+
+  handleChange = (event) => {
+    this.setState({ searchTerm: event.target.value });
+  }
+
+  handleClick = (event) => {
+    event.preventDefault();
+    this.setState({ loadingState: "loading" });
+  }
+
+  async fetchJokes() {
+    try {
+      const url = this.state.searchTerm === "" ? `https://icanhazdadjoke.com/search` : `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`
+      const fetchUrl = fetch(url, {
+        method: "GET",
+        headers: { accept: "application/json" }
+      });
+      const response = await fetchUrl.json()
+      const myData = await response.json();
+      this.setState({
+        jokeData: { results: myData.results },
+        loadingState: "loaded"
+      })
+    } catch(e) {
+        this.setState({loadingState: "Something went wrong"})
     }
-    this.handleChange = this.handleChange.bind(this)
-    this.handleClick = this.handleClick.bind(this)
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.loadingState === "loading") {
+      this.fetchJokes()
+    }
   }
 
-  handleChange(event) {
-    this.setState({searchTerm: event.target.value})
-  }
-
-  async handleClick(event) {
-    event.preventDefault()
-    const url = `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`;
-    const fetchUrl = fetch(url, {
-      method: "GET",
-      headers: { accept: "application/json" }
-    });
-    const response = await fetchUrl;
-    const myData = await response.json();
-    this.setState({ jokeData: { results: myData.results } });
-    // I want to take the search term, and add it to the Joke API url
-    // and then re-render the Jokes, based on that search term.
-  }
-
-  // async componentDidUpdate(prevProps, prevState) {
-  //   const url = `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`;
-  //   const fetchUrl = fetch(url, {
-  //     method: "GET",
-  //     headers: { accept: "application/json" }
-  //   });
-  //   const response = await fetchUrl;
-  //   const myData = await response.json();
-  //   this.setState({ jokeData: { results: myData.results } });
-  // }
-
-  async componentDidMount() {
-    const url = `https://icanhazdadjoke.com/search`;
-    const fetchUrl = fetch(url, {
-      method: "GET",
-      headers: { accept: "application/json" }
-    });
-    const response = await fetchUrl;
-    const myData = await response.json();
-    this.setState({ jokeData: { results: myData.results } });
+  componentDidMount() {
+    this.fetchJokes()
   }
 
   // This needs rendering inside a map function, then rendering in the render as <div>{jokeList}</div>
@@ -62,7 +55,7 @@ class App extends React.Component {
   render() {
     const jokeList = this.state.jokeData.results.map(item => (
       <Joke key={item.id} joke={item.joke} />
-    ))
+    ));
     return (
       <div className="App">
         <PageHeader>
@@ -75,7 +68,9 @@ class App extends React.Component {
           />
         </PageHeader>
         <div className="joke-wrapper">
-          {jokeList}
+          {this.state.loadingState === "loaded"
+            ? jokeList
+            : "loading... please wait"}
         </div>
       </div>
     );
@@ -84,6 +79,6 @@ class App extends React.Component {
 
 SearchInput.propTypes = {
   searchTerm: PropTypes.string
-}
+};
 
 export default App;
