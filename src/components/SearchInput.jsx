@@ -8,22 +8,23 @@ class SearchInput extends React.Component {
       searchTerm: "",
     }
     this.handleChange = this.handleChange.bind(this)
+    this.handleClick = this.handleClick.bind(this)
   }
 
   handleChange(event) {
     this.setState({searchTerm: event.target.value})
-    console.log(this.state.searchTerm)
   }
 
   handleClick(event) {
     event.preventDefault()
+    console.log(this.state.searchTerm)
     // I want to take the search term, and add it to the Joke API url
     // and then re-render the Jokes, based on that search term.
   }
 
   render() {
     return (
-      <form onClick={this.handleClick}>
+      <form onSubmit={this.handleClick}>
         <input
           type="text"
           className="search"

@@ -2,6 +2,7 @@ import React from "react";
 import SearchInput from "./SearchInput";
 
 function PageHeader(props) {
+  
   return (
     <div className="hero">
       <h1>
