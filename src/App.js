@@ -26,13 +26,13 @@ class App extends React.Component {
     try {
       const url =
         this.state.searchTerm === ""
-          ? `https://icanhazdadjoke.com/search/`
+          ? `https://icanhazdadjoke.com/search`
           : `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`;
       const fetchUrl = fetch(url, {
         method: "GET",
         headers: { accept: "application/json" }
       });
-      const response = await fetchUrl.json();
+      const response = await fetchUrl;
       const myData = await response.json();
       this.setState({
         jokeData: { results: myData.results },
@@ -73,7 +73,7 @@ class App extends React.Component {
         <div className="joke-wrapper">
           {this.state.loadingState === "loaded"
             ? jokeList
-            : "loading... please wait"}
+            : `${this.state.loadingState}`}
         </div>
       </div>
     );
