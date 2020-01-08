@@ -2,7 +2,13 @@ import React from "react";
 import Joke from "./components/Joke";
 import PageHeader from "./components/PageHeader";
 import SearchInput from "./components/SearchInput";
-import PropTypes from "prop-types";
+
+const LOADING_STATE = {
+  resting: "resting",
+  loaded: "Loaded",
+  loading: "Loading... please wait",
+  error: "Something went worng..."
+};
 
 class App extends React.Component {
   state = {
@@ -10,7 +16,7 @@ class App extends React.Component {
       results: []
     },
     searchTerm: "",
-    loadingState: "resting"
+    loadingState: LOADING_STATE.resting
   };
 
   handleChange = event => {
@@ -19,7 +25,7 @@ class App extends React.Component {
 
   handleClick = event => {
     event.preventDefault();
-    this.setState({ loadingState: "loading" });
+    this.setState({ loadingState: LOADING_STATE.loading });
   };
 
   async fetchJokes() {
@@ -36,15 +42,15 @@ class App extends React.Component {
       const myData = await response.json();
       this.setState({
         jokeData: { results: myData.results },
-        loadingState: "loaded"
+        loadingState: LOADING_STATE.loaded
       });
     } catch (e) {
-      this.setState({ loadingState: "Something went wrong" });
+      this.setState({ loadingState: LOADING_STATE.error });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.loadingState === "loading") {
+    if (this.state.loadingState === LOADING_STATE.loading) {
       this.fetchJokes();
     }
   }
@@ -71,7 +77,7 @@ class App extends React.Component {
           />
         </PageHeader>
         <div className="joke-wrapper">
-          {this.state.loadingState === "loaded"
+          {this.state.loadingState === LOADING_STATE.loaded
             ? jokeList
             : `${this.state.loadingState}`}
         </div>
@@ -79,9 +85,5 @@ class App extends React.Component {
     );
   }
 }
-
-SearchInput.propTypes = {
-  searchTerm: PropTypes.string
-};
 
 export default App;
