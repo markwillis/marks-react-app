@@ -20,7 +20,10 @@ class App extends React.Component {
   };
 
   handleChange = event => {
-    this.setState({ searchTerm: event.currentTarget.value });dleSubmit = event => {
+    this.setState({ searchTerm: event.currentTarget.value });
+  };
+
+  handleSubmit = event => {
     event.preventDefault();
     this.setState({ loadingState: LOADING_STATE.loading });
   };
