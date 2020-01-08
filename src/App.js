@@ -29,11 +29,12 @@ class App extends React.Component {
   };
 
   async fetchJokes() {
+    const regex = /^[a-zA-Z0-9_]+$/
     try {
       const url =
-        this.state.searchTerm === ""
-          ? `https://icanhazdadjoke.com/search`
-          : `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`;
+        regex.test(this.state.searchTerm)
+          ? `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`
+          : `https://icanhazdadjoke.com/search`;
       const fetchUrl = fetch(url, {
         method: "GET",
         headers: { accept: "application/json" }
