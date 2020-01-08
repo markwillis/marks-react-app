@@ -3,7 +3,7 @@ import React from "react";
 function SearchInput(props) {
   
   return (
-    <form onSubmit={props.handleClick}>
+    <form onSubmit={props.handleSubmit}>
       <input
         type="text"
         className="search"

@@ -20,10 +20,7 @@ class App extends React.Component {
   };
 
   handleChange = event => {
-    this.setState({ searchTerm: event.currentTarget.value });
-  };
-
-  handleClick = event => {
+    this.setState({ searchTerm: event.currentTarget.value });dleSubmit = event => {
     event.preventDefault();
     this.setState({ loadingState: LOADING_STATE.loading });
   };
@@ -70,7 +67,7 @@ class App extends React.Component {
         <PageHeader>
           <SearchInput
             handleChange={this.handleChange}
-            handleClick={this.handleClick}
+            handleSubmit={this.handleSubmit}
             placeholder="Search for a joke..."
             onChange={this.handleChange}
             value={this.state.searchTerm}
