@@ -3,6 +3,8 @@ import Joke from "./components/Joke";
 import PageHeader from "./components/PageHeader";
 import SearchInput from "./components/SearchInput";
 
+const headers = { accept: "application/json" }
+
 const LOADING_STATE = {
   resting: "resting",
   loaded: "Loaded",
@@ -36,8 +38,7 @@ class App extends React.Component {
           ? `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`
           : `https://icanhazdadjoke.com/search`;
       const fetchUrl = fetch(url, {
-        method: "GET",
-        headers: { accept: "application/json" }
+        method: "GET", headers: headers
       });
       const response = await fetchUrl;
       const myData = await response.json();
