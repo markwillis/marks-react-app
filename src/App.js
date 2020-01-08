@@ -20,7 +20,7 @@ class App extends React.Component {
   };
 
   handleChange = event => {
-    this.setState({ searchTerm: event.target.value });
+    this.setState({ searchTerm: event.currentTarget.value });
   };
 
   handleClick = event => {
