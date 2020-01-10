@@ -2,8 +2,10 @@ import React from "react";
 import Joke from "./components/Joke";
 import PageHeader from "./components/PageHeader";
 import SearchInput from "./components/SearchInput";
+import Footer from './components/Footer'
 
 const headers = { accept: "application/json" }
+let url;
 
 const LOADING_STATE = {
   resting: "resting",
@@ -30,13 +32,16 @@ class App extends React.Component {
     this.setState({ loadingState: LOADING_STATE.loading });
   };
 
-  async fetchJokes() {
+  checkInput = string => {
     const regex = /^[a-zA-Z0-9_]+$/
+    regex.test(string) 
+      ? url = `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`
+      : url = `https://icanhazdadjoke.com/search`;
+  }
+
+  async fetchJokes() {
+    this.checkInput(this.state.searchTerm)
     try {
-      const url =
-        regex.test(this.state.searchTerm)
-          ? `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`
-          : `https://icanhazdadjoke.com/search`;
       const fetchUrl = fetch(url, {
         method: "GET", headers: headers
       });
@@ -83,6 +88,7 @@ class App extends React.Component {
             ? jokeList
             : `${this.state.loadingState}`}
         </div>
+        <Footer />
       </div>
     );
   }

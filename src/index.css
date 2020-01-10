@@ -78,7 +78,7 @@ span {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 16px;
-  padding-top: 16px;
+  padding: 30px;
 }
 
 .joke {
@@ -87,6 +87,16 @@ span {
   border: 1px solid;
   border-color: darkgray;
   border-radius: 4px;
+}
+
+.footer {
+  background-color: darkgray;
+  min-height: 20vh;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 
