@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Joke from "./components/Joke";
 import PageHeader from "./components/PageHeader";
 import SearchInput from "./components/SearchInput";
@@ -14,84 +14,69 @@ const LOADING_STATE = {
   error: "Something went worng..."
 };
 
-class App extends React.Component {
-  state = {
-    jokeData: {
-      results: []
-    },
-    searchTerm: "",
-    loadingState: LOADING_STATE.resting
+function App(props) {
+  const [jokeData, setJokeData] = useState({ })
+  const [searchTerm, setSearchTerm] = useState("hat")
+  const [loadingState, setLoadingState] = useState(LOADING_STATE.resting)
+  
+
+  function handleChange(event) {
+    const {value} = event.target
+    setSearchTerm(value);
+    console.log("hello")
   };
 
-  handleChange = event => {
-    this.setState({ searchTerm: event.currentTarget.value });
-  };
-
-  handleSubmit = event => {
+  function handleSubmit(event){
     event.preventDefault();
-    this.setState({ loadingState: LOADING_STATE.loading });
+    setLoadingState(LOADING_STATE.loading);
+    fetchJokes()
   };
 
-  checkInput = string => {
+  function checkInput(string) {
     const regex = /^[a-zA-Z0-9_]+$/
     regex.test(string) 
-      ? url = `https://icanhazdadjoke.com/search?term=${this.state.searchTerm}`
+      ? url = `https://icanhazdadjoke.com/search?term=${searchTerm}`
       : url = `https://icanhazdadjoke.com/search`;
   }
 
-  async fetchJokes() {
-    this.checkInput(this.state.searchTerm)
+  async function fetchJokes() {
+    setLoadingState(LOADING_STATE.loading)
+    checkInput(searchTerm)
     try {
       const fetchUrl = fetch(url, {
         method: "GET", headers: headers
       });
       const response = await fetchUrl;
       const myData = await response.json();
-      this.setState({
-        jokeData: { results: myData.results },
-        loadingState: LOADING_STATE.loaded
-      });
+      setJokeData(myData)
+      setLoadingState(LOADING_STATE.loaded)
     } catch (e) {
-      this.setState({ loadingState: LOADING_STATE.error });
+        setLoadingState(LOADING_STATE.error)
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.loadingState === LOADING_STATE.loading) {
-      this.fetchJokes();
-    }
-  }
+  useEffect(() => {
+    fetchJokes()
+  }, [])
 
-  componentDidMount() {
-    this.fetchJokes();
-  }
-
-  // This needs rendering inside a map function, then rendering in the render as <div>{jokeList}</div>
-  // <Joke key="[ENTER THE KEY HERE]" joke={this.state}/>
-  render() {
-    const jokeList = this.state.jokeData.results.map(item => (
-      <Joke key={item.id} joke={item.joke} />
-    ));
-    return (
-      <div className="App">
-        <PageHeader>
-          <SearchInput
-            handleChange={this.handleChange}
-            handleSubmit={this.handleSubmit}
-            placeholder="Search for a joke..."
-            onChange={this.handleChange}
-            value={this.state.searchTerm}
-          />
-        </PageHeader>
-        <div className="joke-wrapper">
-          {this.state.loadingState === LOADING_STATE.loaded
-            ? jokeList
-            : `${this.state.loadingState}`}
-        </div>
-        <Footer />
+  return (
+    <div className="App">
+      <PageHeader>
+        <SearchInput
+          handleSubmit={handleSubmit}
+          placeholder="Search for a joke..."
+          onChange={handleChange}
+          value={searchTerm}
+        />
+      </PageHeader>
+      <div className="joke-wrapper">
+        {loadingState === LOADING_STATE.loaded
+          ? jokeData.results.map(item => <Joke key={item.id} joke={item.joke} />)
+          : `${loadingState}`}
       </div>
-    );
-  }
+      <Footer />
+    </div>
+  );
 }
 
 export default App;
